@@ -12,15 +12,28 @@ from selenium.common.exceptions import ElementClickInterceptedException, Element
 import pandas as pd
 import os
 
-def setup():
+class setup():
     PATH_ = 'C:\PATH\edgedriver_win64\msedgedriver.exe' # Call path web-driver
     driver = webdriver.Edge(PATH_)
-    return driver
+
+class getTime():
+
+    driver = setup.driver
+    driver = driver
+    driver.get("https://www.timeanddate.com/")
+    wait = WebDriverWait(driver, 20, poll_frequency=1, ignored_exceptions=[
+                                 ElementNotVisibleException, ElementNotSelectableException])
+    
+    hm = wait.until(EC.element_to_be_clickable((By.ID, "clk_hm")))
+    sc = wait.until(EC.element_to_be_clickable((By.ID, "ij0")))
+    
+    hmText = [hm.text]          #Get HH:mm from https://www.timeanddate.com/
+    scText = [sc.text]          #Get sec from https://www.timeanddate.com/
 
 def runTime():
 
     #facebook
-    fbDv = setup()
+    fbDv = setup.driver
     url = "https://www.facebook.com/OutdoorRangsit/posts/4926771320932770" #Link post in Facebook 
 
     newUrl = url.replace("www","m")
@@ -29,29 +42,17 @@ def runTime():
                                  ElementNotVisibleException, ElementNotSelectableException])
 
     waitFb.until(EC.element_to_be_clickable((By.XPATH,"//*[@id='mobile_login_bar']/div[2]/div/a[2]"))).click()
-    waitFb.until(EC.element_to_be_clickable((By.ID,"m_login_email"))).send_keys("Your Email") #Input your email for login facebook
-    waitFb.until(EC.element_to_be_clickable((By.ID,"m_login_password"))).send_keys("You Pass") #Input your passwork for login facebook
+    waitFb.until(EC.element_to_be_clickable((By.ID,"m_login_email"))).send_keys("Your Email")           #Input your email for login facebook
+    waitFb.until(EC.element_to_be_clickable((By.ID,"m_login_password"))).send_keys("Your Pass")          #Input your passwork for login facebook
     waitFb.until(EC.element_to_be_clickable((By.ID,"login_password_step_element"))).click()
     waitFb.until(EC.element_to_be_clickable((By.ID, "composerInput"))).send_keys("Data") #Input data 
 
-    #time-and-date from web timeanddate have neary time in facebook
-    driver = setup()
-    driver = driver
-    driver.get("https://www.timeanddate.com/")
-
-
-    wait = WebDriverWait(driver, 20, poll_frequency=1, ignored_exceptions=[
-                                 ElementNotVisibleException, ElementNotSelectableException])
-    
-
     while True:
-        hm = wait.until(EC.element_to_be_clickable((By.ID, "clk_hm")))
-        sc = wait.until(EC.element_to_be_clickable((By.ID, "ij0")))
-        hmText = [hm.text] #Get HH:mm from https://www.timeanddate.com/
-        scText = [sc.text] #Get sec from https://www.timeanddate.com/
+        hmText = getTime.hmText
+        scText = getTime.scText
 
-        hmStart = '19:00' #Start time
-        hmStop = '20:00' #Stop time
+        hmStart = '19:00'       #Start time
+        hmStop = '20:00'        #Stop time
 
         if (str(hmText) == "['" + hmStart + "']"):
             if (str(scText) == "['00']"):
@@ -63,20 +64,7 @@ def runTime():
         
         else:
             print(str(hmText) + ":" + str(scText))
-            
-def getTime():
-    driver = setup()
-    driver = driver
-    driver.get("https://www.timeanddate.com/")
-    wait = WebDriverWait(driver, 20, poll_frequency=1, ignored_exceptions=[
-                                 ElementNotVisibleException, ElementNotSelectableException])
-    
-    hm = wait.until(EC.element_to_be_clickable((By.ID, "clk_hm")))
-    sc = wait.until(EC.element_to_be_clickable((By.ID, "ij0")))
-    
-    hmText = [hm.text]          #Get HH:mm from https://www.timeanddate.com/
-    scText = [sc.text]          #Get sec from https://www.timeanddate.com/
-    
-    
+
 
 runTime()
+
