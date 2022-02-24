@@ -63,5 +63,20 @@ def runTime():
         
         else:
             print(str(hmText) + ":" + str(scText))
+            
+def getTime():
+    driver = setup()
+    driver = driver
+    driver.get("https://www.timeanddate.com/")
+    wait = WebDriverWait(driver, 20, poll_frequency=1, ignored_exceptions=[
+                                 ElementNotVisibleException, ElementNotSelectableException])
+    
+    hm = wait.until(EC.element_to_be_clickable((By.ID, "clk_hm")))
+    sc = wait.until(EC.element_to_be_clickable((By.ID, "ij0")))
+    
+    hmText = [hm.text]          #Get HH:mm from https://www.timeanddate.com/
+    scText = [sc.text]          #Get sec from https://www.timeanddate.com/
+    
+    
 
 runTime()
